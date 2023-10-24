@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -7,5 +5,23 @@ using UnityEngine;
 /// </summary>
 public class Block : MonoBehaviour
 {
+    private BlockType myBlockType;
 
+    public void SetBlockType(BlockType blockType)
+    {
+        myBlockType = blockType;
+    }
+
+    public BlockType GetBlockType()
+    {
+        return myBlockType;
+    }
+}
+
+public enum BlockType
+{
+    None,
+    Glass,
+    Wood,
+    Stone
 }

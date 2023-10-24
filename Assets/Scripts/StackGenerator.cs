@@ -1,5 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 /// <summary>
@@ -10,43 +10,80 @@ public class StackGenerator : MonoBehaviour
     [SerializeField]
     private Block blockPrefab, blockWoodPrefab, blockGlassPrefab, blockStonePrefab;
     [SerializeField]
-    public Grade grade;
+    private TextMeshPro gradeText; //Text to display the grade
+    [SerializeField]
+    public Grade grade; //Grade to generate the stack for
+
+    private ArrayList blocks = new ArrayList();
+
+    private void Start()
+    {
+        GameManager.Instance.AddStackGenerator(this);
+    }
 
     //Called when the data is loaded from the JSON file
     private void OnDataLoaded()
     {
         GenerateStack(JSONLoader.Instance.GetGradeData((int)grade));
+        SetGradeTextLabel();
+    }
+
+    private void SetGradeTextLabel()
+    {
+        string gradeTextLabel = "Grade";
+        switch (grade)
+        {
+            case Grade.Sixth:
+                gradeTextLabel = "6th Grade";
+                break;
+            case Grade.Seventh:
+                gradeTextLabel = "7th Grade";
+                break;
+            case Grade.Eighth:
+                gradeTextLabel = "8th Grade";
+                break;
+        }
+        gradeText.text = gradeTextLabel;
     }
 
     //Generate a tower of blocks based on the grade selected in the inspector
     public void GenerateStack(GradeData[] gradeData)
     {
+        blocks.Clear();
+
         for (int i = 0; i < gradeData.Length; i++)
         {
-            CreateBlock(i, gradeData[i].mastery);
+            Debug.Log("Subject: " + gradeData[i].subject + ", Grade: " + gradeData[i].grade + ", Domain: " + gradeData[i].domain
+                 + ", cluster: " + gradeData[i].cluster + ", standard ID: " + gradeData[i].standardid);
+            Block block = CreateBlock(i, gradeData[i].mastery);
+            blocks.Add(block);
         }
     }
 
     //Create a block at the specified index
-    private void CreateBlock(int index, int mastery)
+    private Block CreateBlock(int index, int mastery)
     {
         Block block = blockPrefab;
         switch (mastery)
         {
             case 0:
-                block = blockGlassPrefab;
+                block = Instantiate(blockGlassPrefab);
+                block.SetBlockType(BlockType.Glass);
                 break;
             case 1:
-                block = blockWoodPrefab;
+                block = Instantiate(blockWoodPrefab);
+                block.SetBlockType(BlockType.Wood);
                 break;
             case 2:
-                block = blockStonePrefab;
+                block = Instantiate(blockStonePrefab);
+                block.SetBlockType(BlockType.Stone);
                 break;
         }
-        block = Instantiate(block);
         block.transform.parent = transform;
         block.transform.localPosition = GetBlockStackLocation(index);
         block.transform.localRotation = GetBlockStackRotation(index);
+
+        return block;
     }
 
     //Determine the location of each block in the stack, starting from the bottom
@@ -100,6 +137,17 @@ public class StackGenerator : MonoBehaviour
     private void OnDisable()
     {
         JSONLoader.Instance.OnDataLoaded -= OnDataLoaded;
+    }
+
+    public void DestroyAllGlassBlocks()
+    {
+        foreach (Block block in blocks)
+        {
+            if (block.GetBlockType() == BlockType.Glass)
+            {
+                block.gameObject.SetActive(false);
+            }
+        }
     }
 }
 

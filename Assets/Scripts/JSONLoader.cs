@@ -1,6 +1,7 @@
+using System.Collections;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
-using System.Collections;
 
 /// <summary>
 /// Class for loading the JSON data from the web server based on the URL.
@@ -61,7 +62,7 @@ public class JSONLoader : MonoBehaviour
         ArrayList gradeDataList = new ArrayList();
 
         string gradeString = "-1";
-        switch(grade)
+        switch (grade)
         {
             case 6:
                 gradeString = "6th Grade";
@@ -84,7 +85,20 @@ public class JSONLoader : MonoBehaviour
             }
         }
 
-        return (GradeData[])gradeDataList.ToArray(typeof(GradeData));
+        return SortGradeData((GradeData[])gradeDataList.ToArray(typeof(GradeData)));
+    }
+
+    //Sort the gradeDataArray based on domain, cluster, and standard ID using LINQ
+    private GradeData[] SortGradeData(GradeData[] gradeData)
+    {
+        gradeData = gradeData.OrderBy(gradeData => gradeData.domain).ToArray();
+
+        gradeData = gradeData
+                .OrderBy(gradeData => gradeData.domain)
+                .ThenBy(gradeData => gradeData.cluster)
+                .ThenBy(gradeData => gradeData.standardid)
+                .ToArray();
+        return gradeData;
     }
 }
 
