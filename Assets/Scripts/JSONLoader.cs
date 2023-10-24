@@ -2,11 +2,25 @@ using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
 
+/// <summary>
+/// Class for loading the JSON data from the web server based on the URL.
+/// This class is a singleton, so it can be accessed from anywhere in the project.
+/// </summary>
 public class JSONLoader : MonoBehaviour
 {
     private string url = "https://ga1vqcu3o1.execute-api.us-east-1.amazonaws.com/Assessment/stack";
 
     private GradeDataArray gradeDataArray;
+
+    public static JSONLoader Instance;
+
+    public delegate void OnDataLoadedDelegate();
+    public OnDataLoadedDelegate OnDataLoaded;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     void Start()
     {
@@ -28,6 +42,7 @@ public class JSONLoader : MonoBehaviour
         }
     }
 
+    //Parse the JSON data into an array of GradeData objects
     void ProcessJSONData(string jsonString)
     {
         gradeDataArray = JsonUtility.FromJson<GradeDataArray>("{\"gradeDataArray\":" + jsonString + "}");
@@ -36,6 +51,40 @@ public class JSONLoader : MonoBehaviour
         {
             Debug.Log("Subject: " + gradeData.subject + ", Grade: " + gradeData.grade);
         }
+
+        OnDataLoaded?.Invoke();
+    }
+
+    //Return an array of GradeData objects based on the grade
+    public GradeData[] GetGradeData(int grade)
+    {
+        ArrayList gradeDataList = new ArrayList();
+
+        string gradeString = "-1";
+        switch(grade)
+        {
+            case 6:
+                gradeString = "6th Grade";
+                break;
+
+            case 7:
+                gradeString = "7th Grade";
+                break;
+
+            case 8:
+                gradeString = "8th Grade";
+                break;
+        }
+
+        foreach (GradeData gradeData in gradeDataArray.gradeDataArray)
+        {
+            if (gradeData.grade == gradeString)
+            {
+                gradeDataList.Add(gradeData);
+            }
+        }
+
+        return (GradeData[])gradeDataList.ToArray(typeof(GradeData));
     }
 }
 
