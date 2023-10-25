@@ -19,7 +19,7 @@ This project is a 3D Jenga-based educational game developed in Unity to help stu
 
 ### Prerequisites
 
-- Unity 2021.1.14 or later
+- Unity 2022.3.11f1 or later
 
 ### Installation
 

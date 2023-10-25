@@ -1578,7 +1578,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockInfoPanel: {fileID: 1490568001}
-  highlightMaterial: {fileID: 2100000, guid: 0b157bbeb59d3fb4cb7f7a79c0066f32, type: 2}
+  highlightMaterial: {fileID: 2100000, guid: 20f510f431b71e347aae73999d58b9a5, type: 2}
 --- !u!4 &1676557005
 Transform:
   m_ObjectHideFlags: 0
