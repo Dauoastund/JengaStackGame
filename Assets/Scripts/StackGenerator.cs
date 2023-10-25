@@ -18,7 +18,7 @@ public class StackGenerator : MonoBehaviour
 
     private void Start()
     {
-        GameManager.Instance.AddStackGenerator(this);
+        GameManager.Instance.AddStackGenerator(this,(int)grade-6);
     }
 
     //Called when the data is loaded from the JSON file
@@ -56,6 +56,7 @@ public class StackGenerator : MonoBehaviour
             Debug.Log("Subject: " + gradeData[i].subject + ", Grade: " + gradeData[i].grade + ", Domain: " + gradeData[i].domain
                  + ", cluster: " + gradeData[i].cluster + ", standard ID: " + gradeData[i].standardid);
             Block block = CreateBlock(i, gradeData[i].mastery);
+            block.SetGradeData(gradeData[i]);
             blocks.Add(block);
         }
     }

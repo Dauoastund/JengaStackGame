@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 /// <summary>
@@ -6,6 +7,7 @@ using UnityEngine;
 public class Block : MonoBehaviour
 {
     private BlockType myBlockType;
+    private GradeData gradeData;
 
     public void SetBlockType(BlockType blockType)
     {
@@ -15,6 +17,16 @@ public class Block : MonoBehaviour
     public BlockType GetBlockType()
     {
         return myBlockType;
+    }
+
+    public void SetGradeData(GradeData gradeData)
+    {
+        this.gradeData = gradeData;
+    }
+
+    public GradeData GetGradeData()
+    {
+        return gradeData;
     }
 }
 

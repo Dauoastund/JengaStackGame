@@ -1,43 +1,26 @@
 using System.Collections;
+using TMPro.Examples;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    private ArrayList stackGenerators = new ArrayList();
-
-    private GameMode gameMode;
+    private StackGenerator[] stackGenerators = new StackGenerator[3];
 
     private void Awake()
     {
         Instance = this;
-        gameMode = GameMode.None;
     }
 
     public void StartTestMyStackGameMode()
     {
-        gameMode = GameMode.TestMyStack;
-        Debug.Log(stackGenerators.Count);
-        foreach (StackGenerator stackGenerator in stackGenerators)
-        {
-            stackGenerator.DestroyAllGlassBlocks();
-        }
+        int stackIndex = CameraController.Instance.GetTargetIndex();
+        stackGenerators[stackIndex].DestroyAllGlassBlocks();
     }
 
-    public void AddStackGenerator(StackGenerator stackGenerator)
+    public void AddStackGenerator(StackGenerator stackGenerator, int index)
     {
-        stackGenerators.Add(stackGenerator);
+        stackGenerators[index] = stackGenerator;
     }
-}
-
-[System.Serializable]
-public enum GameMode
-{
-    None,
-    TestMyStack,
-    StrengthenMyStack,
-    Earthquake,
-    BuildMyStack,
-    Challenge
 }

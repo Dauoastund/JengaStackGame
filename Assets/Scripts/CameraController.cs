@@ -6,6 +6,8 @@ using UnityEngine;
 /// </summary>
 public class CameraController : MonoBehaviour
 {
+    public static CameraController Instance;
+
     public Transform[] stacks;  // Array to hold the transforms of the 3 stacks
     public float orbitSpeed = 10f;  // Speed of the orbiting movement
     public float switchSpeed = .8f;  // Speed of the switching movement between stacks
@@ -14,6 +16,11 @@ public class CameraController : MonoBehaviour
     private Transform target;  // Current target stack
     private int targetIndex;  // Index of the current target stack
     private bool isSwitching;  // Flag to check if we are switching between stacks
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     void Start()
     {
@@ -71,5 +78,10 @@ public class CameraController : MonoBehaviour
             yield return null;
         }
         isSwitching = false;  // End switching
+    }
+
+    public int GetTargetIndex()
+    {
+        return targetIndex;
     }
 }
